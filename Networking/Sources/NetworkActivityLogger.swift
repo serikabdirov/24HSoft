@@ -1,3 +1,10 @@
+//
+//  NetworkActivityLogger.swift
+//  Test_24HSoft
+//
+//  Created by Серик Абдиров on 01.07.2025.
+//
+
 import Alamofire
 import Foundation
 
