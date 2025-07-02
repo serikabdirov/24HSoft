@@ -8,10 +8,10 @@
 import Foundation
 import UIKit
 
-final class PhotoListFactory: Factory {
+final class PhotoListFactory: @preconcurrency Factory {
     typealias Context = Void
 
-    func build(with context: Context) -> some UIViewController {
+    @MainActor func build(with context: Context) -> some UIViewController {
         let viewModel = PhotoListViewModel(apiClient: ApiClient.shared)
         let vc = PhotoListViewController(viewModel: viewModel)
         return vc

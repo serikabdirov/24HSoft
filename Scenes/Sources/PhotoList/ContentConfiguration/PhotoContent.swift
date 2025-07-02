@@ -5,10 +5,10 @@
 //  Created by Серик Абдиров on 01.07.2025.
 //
 
-import UIKit
-import SnapKit
 import Nuke
 import NukeExtensions
+import SnapKit
+import UIKit
 
 final class PhotoContent: UIView, UIContentView {
     var currentConfiguration: PhotoContentConfiguration!
@@ -31,6 +31,16 @@ final class PhotoContent: UIView, UIContentView {
     let imageView = UIImageView()
 
     let labelsStackView = UIStackView()
+
+    let imageLoadingOptions = ImageLoadingOptions(
+        placeholder: UIImage(systemName: "photo.badge.arrow.down"),
+        failureImage: UIImage(systemName: "photo.badge.exclamationmark"),
+        contentModes: .init(
+            success: .scaleAspectFit,
+            failure: .center,
+            placeholder: .center
+        )
+    )
 
     init(_ configuration: PhotoContentConfiguration) {
         super.init(frame: .zero)
@@ -56,7 +66,7 @@ final class PhotoContent: UIView, UIContentView {
         labelsStackView.axis = .vertical
         labelsStackView.distribution = .fillProportionally
 
-        imageView.contentMode = .scaleAspectFit
+//        imageView.contentMode = .scaleAspectFit
 
         labelsStackView.addArrangedSubview(descriptionLabel)
         labelsStackView.addArrangedSubview(likesLabel)
@@ -81,13 +91,13 @@ final class PhotoContent: UIView, UIContentView {
         }
 
         currentConfiguration = configuration
-        
+
         descriptionLabel.text = configuration.description
         descriptionLabel.textColor = configuration.color
 
         likesLabel.text = configuration.likes
         likesLabel.textColor = configuration.color
 
-        loadImage(with: configuration.image, into: imageView)
+        loadImage(with: configuration.image, options: imageLoadingOptions, into: imageView)
     }
 }

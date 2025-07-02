@@ -5,12 +5,18 @@
 //  Created by Серик Абдиров on 01.07.2025.
 //
 
+import Nuke
 import UIKit
 
+@MainActor
 final class PhotoListViewModel {
     typealias CellRegistration = UICollectionView.CellRegistration<PhotoCell, Photo>
     typealias DataSource = UICollectionViewDiffableDataSource<Sections, Photo>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Sections, Photo>
+
+    var isLoading: ((Bool) -> Void)?
+
+    private let prefetcher = ImagePrefetcher()
 
     private var cellRegistration: CellRegistration!
     private var dataSource: DataSource!
@@ -46,6 +52,17 @@ final class PhotoListViewModel {
 
     func loadData() async {
         do {
+            isLoading?(true)
+            let photos = try await apiClient.fetch()
+            await snapshot(photos)
+            isLoading?(false)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+
+    func updateData() async {
+        do {
             let photos = try await apiClient.fetch()
             await snapshot(photos)
         } catch {
@@ -53,11 +70,18 @@ final class PhotoListViewModel {
         }
     }
 
-    func didSelectItem(at indexPath: IndexPath) {
-        if let identifier = dataSource.itemIdentifier(for: indexPath) {
-            print(identifier)
-            print(indexPath)
-        }
+    func getPhoto(at indexPath: IndexPath) -> Photo? {
+        dataSource.itemIdentifier(for: indexPath)
+    }
+
+    func startPrefetching(for indexPaths: [IndexPath]) {
+        let urlsForPrefetching = indexPaths.compactMap { getPhoto(at: $0)?.thumb }
+        prefetcher.startPrefetching(with: urlsForPrefetching)
+    }
+
+    func stopPrefetching(for indexPaths: [IndexPath]) {
+        let urlsForPrefetching = indexPaths.compactMap { getPhoto(at: $0)?.thumb }
+        prefetcher.stopPrefetching(with: urlsForPrefetching)
     }
 }
 

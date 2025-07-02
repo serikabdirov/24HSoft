@@ -17,6 +17,14 @@ final class PhotoListViewController: UIViewController {
     init(viewModel: PhotoListViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+
+        self.viewModel.isLoading = { [weak self] isLoading in
+            if isLoading {
+                self?.showLoadingOverlay()
+            } else {
+                self?.hideLoadingOverlay()
+            }
+        }
     }
 
     @available(*, unavailable)
@@ -46,9 +54,10 @@ final class PhotoListViewController: UIViewController {
             frame: .zero,
             collectionViewLayout: createLayout(for: UIScreen.main.bounds.size)
         )
-        collectionView.allowsMultipleSelection = true
 
         collectionView.delegate = self
+        collectionView.isPrefetchingEnabled = true
+        collectionView.prefetchDataSource = self
 
         refresh.addTarget(self, action: #selector(refreshAction), for: .valueChanged)
         collectionView.refreshControl = refresh
@@ -74,18 +83,44 @@ final class PhotoListViewController: UIViewController {
     func loadData() {
         Task {
             await viewModel.loadData()
+        }
+    }
+
+    func updateData() {
+        Task {
+            await viewModel.updateData()
             refresh.endRefreshing()
         }
     }
 
     @objc
     private func refreshAction() {
-        loadData()
+        updateData()
+    }
+
+    private func showLoadingOverlay() {
+        LoadingOverlay.shared.show(over: view)
+    }
+
+    private func hideLoadingOverlay() {
+        LoadingOverlay.shared.hide()
     }
 }
 
 extension PhotoListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        viewModel.didSelectItem(at: indexPath)
+        if let photo = viewModel.getPhoto(at: indexPath) {
+            navigationController?.pushViewController(PhotoDetailViewController(photo: photo), animated: true)
+        }
+    }
+}
+
+extension PhotoListViewController: UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        viewModel.startPrefetching(for: indexPaths)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+        viewModel.stopPrefetching(for: indexPaths)
     }
 }
