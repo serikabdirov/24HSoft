@@ -17,20 +17,39 @@ final class PhotoListInteractor: PhotoListInteractorInput {
     private let presenter: any PhotoListPresenterInput
     private let router: any PhotoListRouterInput
 
-    init(presenter: any PhotoListPresenterInput, router: any PhotoListRouterInput) {
+    private let apiClient: ApiClient
+
+    init(apiClient: ApiClient, presenter: any PhotoListPresenterInput, router: any PhotoListRouterInput) {
+        self.apiClient = apiClient
         self.presenter = presenter
         self.router = router
     }
 
     func loadData() {
-
+        Task {
+            do {
+                presenter.presentLoading(true)
+                let photos = try await apiClient.fetch()
+                presenter.presentData(photos)
+                presenter.presentLoading(false)
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
     }
 
     func updateData() {
-        
+        Task {
+            do {
+                let photos = try await apiClient.fetch()
+                presenter.presentData(photos)
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
     }
 
     func didSelectItem(_ item: Photo) {
-        
+        print(item.id)
     }
 }

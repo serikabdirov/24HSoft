@@ -12,7 +12,7 @@ public final class PhotoListBuilder {
     func make() -> UIViewController {
         let presenter = PhotoListPresenter()
         let router = PhotoListRouter()
-        let interactor = PhotoListInteractor(presenter: presenter, router: router)
+        let interactor = PhotoListInteractor(apiClient: ApiClient.shared, presenter: presenter, router: router)
 
         let viewController = NewPhotoListViewController(interactor: interactor)
 

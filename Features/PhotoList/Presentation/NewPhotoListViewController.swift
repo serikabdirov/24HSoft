@@ -10,7 +10,8 @@ import UIKit
 import SnapKit
 
 protocol NewPhotoListViewControllerInput: AnyObject {
-    func snapshot(_ photos: [Photo]) async
+    func configure(with photos: [Photo])
+    func presentLoading(_ isLoading: Bool)
 }
 
 final class NewPhotoListViewController: UIViewController {
@@ -95,13 +96,27 @@ final class NewPhotoListViewController: UIViewController {
 }
 
 extension NewPhotoListViewController: NewPhotoListViewControllerInput {
-    func snapshot(_ photos: [Photo]) async {
+    func configure(with photos: [Photo]) {
         var snapshot = Snapshot()
 
         snapshot.appendSections([.main])
         snapshot.appendItems(photos, toSection: .main)
 
-        await dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource.apply(snapshot, animatingDifferences: true)
+
+        DispatchQueue.main.async { [weak self] in
+            self?.refresh.endRefreshing()
+        }
+    }
+
+    func presentLoading(_ isLoading: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            if let self, isLoading {
+                LoadingOverlay.shared.show(over: view)
+            } else {
+                LoadingOverlay.shared.hide()
+            }
+        }
     }
 }
 
