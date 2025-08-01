@@ -7,7 +7,11 @@
 
 import Foundation
 
-protocol PhotoListInteractorInput: AnyObject {}
+protocol PhotoListInteractorInput: AnyObject {
+    func loadData()
+    func updateData()
+    func didSelectItem(_ item: Photo)
+}
 
 final class PhotoListInteractor: PhotoListInteractorInput {
     private let presenter: any PhotoListPresenterInput
@@ -16,5 +20,17 @@ final class PhotoListInteractor: PhotoListInteractorInput {
     init(presenter: any PhotoListPresenterInput, router: any PhotoListRouterInput) {
         self.presenter = presenter
         self.router = router
+    }
+
+    func loadData() {
+
+    }
+
+    func updateData() {
+        
+    }
+
+    func didSelectItem(_ item: Photo) {
+        
     }
 }
