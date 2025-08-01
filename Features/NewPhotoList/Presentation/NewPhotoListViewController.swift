@@ -25,9 +25,9 @@ final class NewPhotoListViewController: UIViewController {
 
     private let refresh = UIRefreshControl()
 
-    private let interactor: any PhotoListInteractorInput
+    private let interactor: any NewPhotoListInteractorInput
 
-    init(interactor: any PhotoListInteractorInput) {
+    init(interactor: any NewPhotoListInteractorInput) {
         self.interactor = interactor
 
         super.init(nibName: nil, bundle: nil)

@@ -8,10 +8,10 @@
 import Foundation
 import UIKit
 
-protocol PhotoListRouterInput: AnyObject {
+protocol NewPhotoListRouterInput: AnyObject {
 
 }
 
-final class PhotoListRouter: PhotoListRouterInput {
+final class NewPhotoListRouter: NewPhotoListRouterInput {
     weak var viewController: UIViewController?
 }

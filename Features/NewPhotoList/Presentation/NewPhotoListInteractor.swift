@@ -7,19 +7,19 @@
 
 import Foundation
 
-protocol PhotoListInteractorInput: AnyObject {
+protocol NewPhotoListInteractorInput: AnyObject {
     func loadData()
     func updateData()
     func didSelectItem(_ item: Photo)
 }
 
-final class PhotoListInteractor: PhotoListInteractorInput {
-    private let presenter: any PhotoListPresenterInput
-    private let router: any PhotoListRouterInput
+final class NewPhotoListInteractor: NewPhotoListInteractorInput {
+    private let presenter: any NewPhotoListPresenterInput
+    private let router: any NewPhotoListRouterInput
 
     private let apiClient: ApiClient
 
-    init(apiClient: ApiClient, presenter: any PhotoListPresenterInput, router: any PhotoListRouterInput) {
+    init(apiClient: ApiClient, presenter: any NewPhotoListPresenterInput, router: any NewPhotoListRouterInput) {
         self.apiClient = apiClient
         self.presenter = presenter
         self.router = router

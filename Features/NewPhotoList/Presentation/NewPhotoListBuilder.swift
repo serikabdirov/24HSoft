@@ -8,11 +8,11 @@
 import Foundation
 import UIKit
 
-public final class PhotoListBuilder {
+public final class NewPhotoListBuilder {
     func make() -> UIViewController {
-        let presenter = PhotoListPresenter()
-        let router = PhotoListRouter()
-        let interactor = PhotoListInteractor(apiClient: ApiClient.shared, presenter: presenter, router: router)
+        let presenter = NewPhotoListPresenter()
+        let router = NewPhotoListRouter()
+        let interactor = NewPhotoListInteractor(apiClient: ApiClient.shared, presenter: presenter, router: router)
 
         let viewController = NewPhotoListViewController(interactor: interactor)
 

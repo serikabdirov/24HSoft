@@ -7,12 +7,12 @@
 
 import Foundation
 
-protocol PhotoListPresenterInput: AnyObject {
+protocol NewPhotoListPresenterInput: AnyObject {
     func presentData(_ data: [Photo])
     func presentLoading(_ isLoading: Bool)
 }
 
-final class PhotoListPresenter: PhotoListPresenterInput {
+final class NewPhotoListPresenter: NewPhotoListPresenterInput {
     weak var viewController: (any NewPhotoListViewControllerInput)?
 
     func presentData(_ data: [Photo]) {
