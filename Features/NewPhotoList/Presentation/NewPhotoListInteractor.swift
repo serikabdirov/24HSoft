@@ -50,6 +50,6 @@ final class NewPhotoListInteractor: NewPhotoListInteractorInput {
     }
 
     func didSelectItem(_ item: Photo) {
-        print(item.id)
+        router.openDetail(for: item)
     }
 }
