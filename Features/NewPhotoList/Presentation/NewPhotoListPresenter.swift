@@ -13,7 +13,7 @@ protocol NewPhotoListPresenterInput: AnyObject {
 }
 
 final class NewPhotoListPresenter: NewPhotoListPresenterInput {
-    weak var viewController: (any NewPhotoListViewControllerInput)?
+    weak var viewController: NewPhotoListViewControllerInput?
 
     func presentData(_ data: [Photo]) {
         viewController?.configure(with: data)

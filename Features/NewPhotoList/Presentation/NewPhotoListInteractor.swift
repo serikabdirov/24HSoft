@@ -14,12 +14,12 @@ protocol NewPhotoListInteractorInput: AnyObject {
 }
 
 final class NewPhotoListInteractor: NewPhotoListInteractorInput {
-    private let presenter: any NewPhotoListPresenterInput
-    private let router: any NewPhotoListRouterInput
+    private let presenter: NewPhotoListPresenterInput
+    private let router: NewPhotoListRouterInput
 
     private let apiClient: ApiClient
 
-    init(apiClient: ApiClient, presenter: any NewPhotoListPresenterInput, router: any NewPhotoListRouterInput) {
+    init(apiClient: ApiClient, presenter: NewPhotoListPresenterInput, router: NewPhotoListRouterInput) {
         self.apiClient = apiClient
         self.presenter = presenter
         self.router = router
