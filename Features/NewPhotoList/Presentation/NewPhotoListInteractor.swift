@@ -8,8 +8,8 @@
 import Foundation
 
 protocol NewPhotoListInteractorInput: AnyObject {
-    func loadData()
-    func updateData()
+    func viewDidLoad()
+    func handleRefreshAction()
     func didSelectItem(_ item: Photo)
 }
 
@@ -25,7 +25,7 @@ final class NewPhotoListInteractor: NewPhotoListInteractorInput {
         self.router = router
     }
 
-    func loadData() {
+    func viewDidLoad() {
         Task {
             do {
                 presenter.presentLoading(true)
@@ -38,7 +38,7 @@ final class NewPhotoListInteractor: NewPhotoListInteractorInput {
         }
     }
 
-    func updateData() {
+    func handleRefreshAction() {
         Task {
             do {
                 let photos = try await apiClient.fetch()

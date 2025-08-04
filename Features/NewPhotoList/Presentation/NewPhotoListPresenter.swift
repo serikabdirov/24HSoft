@@ -20,6 +20,6 @@ final class NewPhotoListPresenter: NewPhotoListPresenterInput {
     }
 
     func presentLoading(_ isLoading: Bool) {
-        viewController?.presentLoading(isLoading)
+        viewController?.configure(isLoading: isLoading)
     }
 }

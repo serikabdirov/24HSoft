@@ -11,7 +11,7 @@ import SnapKit
 
 protocol NewPhotoListViewControllerInput: AnyObject {
     func configure(with photos: [Photo])
-    func presentLoading(_ isLoading: Bool)
+    func configure(isLoading: Bool)
 }
 
 final class NewPhotoListViewController: UIViewController {
@@ -43,7 +43,7 @@ final class NewPhotoListViewController: UIViewController {
         setupCollectionView()
         setupDataSource()
         setupViews()
-        interactor.loadData()
+        interactor.viewDidLoad()
     }
 
     private func setupCollectionView() {
@@ -91,7 +91,7 @@ final class NewPhotoListViewController: UIViewController {
 
     @objc
     private func refreshAction() {
-        interactor.updateData()
+        interactor.handleRefreshAction()
     }
 }
 
@@ -109,7 +109,7 @@ extension NewPhotoListViewController: NewPhotoListViewControllerInput {
         }
     }
 
-    func presentLoading(_ isLoading: Bool) {
+    func configure(isLoading: Bool) {
         DispatchQueue.main.async { [weak self] in
             if let self, isLoading {
                 LoadingOverlay.shared.show(over: view)
